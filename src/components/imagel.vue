@@ -8,6 +8,7 @@
           <img  v-bind:src='image'  />
           <div class="overlay">
             <button @click="deletes(item)">Delete</button>
+            <label class='label'>label</label>
             </div>
         </div>
       </div>
@@ -19,6 +20,7 @@
           <img  v-bind:src='image'  />
          <div class="overlay">
             <button @click="deletes(item)">Delete</button>
+            <label class='label'>label</label>
             </div>
         </div>
       </div>
@@ -30,6 +32,7 @@
           <img  v-bind:src='image'  />
          <div class="overlay">
             <button @click="deletes(item)">Delete</button>
+            <label class='label'>label</label>
             </div>
         </div>
       </div>
@@ -84,6 +87,14 @@ export default {
   padding: 0 4px;
   justify-content: center;
 }
+.label {
+  color : #ffff;
+   position: absolute;
+  -webkit-transform: translate(50%, 50%);
+  -ms-transform: translate(50%, 50%);
+  transform: translate(50%, 2500%);
+  
+}
 .column {
   flex: 30%;
   max-width: 30%;
@@ -100,6 +111,7 @@ space-between;
 .imgs {
   position: relative;
 }
+
 button {
   border: 1px solid #eb5757;
   border-radius: 12px;

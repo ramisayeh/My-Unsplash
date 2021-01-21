@@ -1,124 +1,230 @@
 <template>
-  <vue-navigation-bar :options="navbarOptions" />
+  <div class="topnav">
+  <img class="header__logo" src="../assets/logo.png" />
+  <div class="search-container">
+    <form >
+      <input type="text" placeholder="Search by name" name="search">
+    </form>
+  </div>
+ <v-dialog
+      v-model="dialog"
+      persistent
+      max-width="600px"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          v-bind="attrs"
+          v-on="on"
+        >
+          add a photo 
+        </v-btn>
+      </template>
+      <v-card>
+        <v-card-title>
+          <span class="headline">User Profile</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+              >
+                <v-text-field
+                  label="Legal first name*"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+              >
+                <v-text-field
+                  label="Legal middle name"
+                  hint="example of helper text only on focus"
+                ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+              >
+                <v-text-field
+                  label="Legal last name*"
+                  hint="example of persistent helper text"
+                  persistent-hint
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  label="Email*"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  label="Password*"
+                  type="password"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+              >
+                <v-select
+                  :items="['0-17', '18-29', '30-54', '54+']"
+                  label="Age*"
+                  required
+                ></v-select>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+              >
+                <v-autocomplete
+                  :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
+                  label="Interests"
+                  multiple
+                ></v-autocomplete>
+              </v-col>
+            </v-row>
+          </v-container>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="dialog = false"
+          >
+            Close
+          </v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="dialog = false"
+          >
+            Save
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+</div>
+  
 </template>
 
 <script>
-import Vue from 'vue';
-import "vue-navigation-bar/dist/vue-navigation-bar.css";
-import VueNavigationBar from "vue-navigation-bar";
-Vue.component("vue-navigation-bar", VueNavigationBar); 
+
+
 
   export default {
     
       data() {
         return {
+          dialog: false,
           navbarOptions: {
             name: 'Mainnavbar',
             elementId: "main-navbar",
             isUsingVueRouter: true,
             mobileBreakpoint: 99,
-            brandImageAltText: "brand-image",
-            collapseButtonOpenColor: "#661c23",
-            collapseButtonCloseColor: "#661c23",
-            showBrandImageInMobilePopup: true,
-            ariaLabelMainNav: "Main Navigation",
-            tooltipAnimationType: "shift-away",
-            tooltipPlacement: "bottom",
-            menuOptionsLeft: [
-              {
-                type: "link",
-                text: "Why Dunder Mifflin",
-                arrowColor: "#659CC8",
-                subMenuOptions: [
-                  {
-                    isLinkAction: true,
-                    type: "link",
-                    text: "About",
-                    subText: "Stupid corporate wet blankets. Like booze ever killed anyone.",
-                    path: { name: "about" },
-                    iconLeft: '<i class="fa fa-star fa-fw"></i>'
-                  },
-                  {
-                    type: "hr",
-                  },
-                  {
-                    type: "link",
-                    text: "Locations",
-                    subText: "You're a presentation tool!",
-                    path: { name: "locations" },
-                    arrowColor: "#659CC8",
-                  },
-                  {
-                    type: "hr",
-                  },
-                  {
-                    type: "link",
-                    text: "Blog",
-                    subText: "I enjoy having breakfast in bed. I like waking up to the smell of bacon. Sue me.",
-                    path: { name: "blog" }
-                  },
-                ]
-              },
-              {
-                type: "link",
-                text: "Contact",
-                subMenuOptions: [
-                  {
-                    type: "link",
-                    text: "Customer Service",
-                    path: { name: "customer-service" },
-                  },
-                  {
-                    type: "link",
-                    text: "Accounting",
-                    path: { name: "accounting" },
-                  },
-                  {
-                    type: "hr",
-                  },
-                  {
-                    type: "link",
-                    text: "Reception",
-                    path: { name: "reception"},
-                    iconLeft: '<svg id="i-telephone" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"> <path d="M3 12 C3 5 10 5 16 5 22 5 29 5 29 12 29 20 22 11 22 11 L10 11 C10 11 3 20 3 12 Z M11 14 C11 14 6 19 6 28 L26 28 C26 19 21 14 21 14 L11 14 Z" /> <circle cx="16" cy="21" r="4" /> </svg>',
-                  },
-                ]
-              },
-              {
-                type: "link",
-                text: "Pricing",
-                path: { name: "pricing"},
-                iconRight: '<i class="fa fa-long-arrow-right fa-fw"></i>',
-              },
-            ],
-            menuOptionsRight: [
-              {
-                type: "button",
-                text: "Signup",
-                path: { name: "signup" },
-                class: "button-red"
-              },
-              {
-                type: "button",
-                text: "Login",
-                path: { name: "login" },
-                iconRight: '<svg id="i-arrow-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"> <path d="M22 6 L30 16 22 26 M30 16 L2 16" /> </svg>'
-              }
-            ]
-          }
-        }
-      }
-      
+           
+                    }
+                }
+            }
   }
 </script>
 
 <style lang="css">
-  .vnb .button-red {
-      background: #ff3b30;}
+  .topnav {
 
-    .vnb .button-red:hover {
-        background: darken(#ff3b30, 10%);
-      
-    }
+  background-color: #ffffff;
+}
+@media screen and (min-width: 768px){
+.header__logo {
+    width: 140px;
+    margin-right: 14px;
+}}
+.header__logo {
+  float: left;
+    height: 30px;
+    width: 110px;
+  margin-top: 12px;
+}
+
+.topnav .v-btn {
+  float: right;
+background-color:
+#3db46d;
+
+border-color:
+#3db46d;
+border-style:
+solid;
+box-shadow:
+#000000 0px 1px 6px 0px;
+color:
+#ffffff;
+text-align:
+center;
+    font-size: 14px;
+    line-height: 19px;
+    border: none;
+    padding: 14px 22px;
+    border-radius: 24px;
+    font-weight: 700;
+    transition: all .25s;
+    height: 50px;
+
+}
+
+.topnav .v-btn:hover {
+  background-color:#37a06d;
+  color: rgb(255, 255, 255);
+}
+
+.topnav .search-container {
+  float: left;
+}
+
+.topnav input[type=text] {
+  padding: 6px;
+  margin-top: 8px;
+  font-size: 17px;
+
+}
+
+
+
+.topnav .search-container button:hover {
+  background: #ccc;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav .search-container {
+    float: right;
+  }
+  .topnav .search-container {
+    float: right ;
+  }
+
+   .topnav input[type=text], .topnav .search-container button {
+    float: right ;
+    text-align: left;
+    width: 100%;
+    margin: 0;
+    padding: 14px;
+
+  }
+  
+}
+.topnav input[type=text] {
+    border: 1px solid rgb(10, 10, 10);  
+    border-radius: 24px;
+  }
   
 </style>
