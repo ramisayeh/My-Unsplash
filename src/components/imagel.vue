@@ -1,38 +1,184 @@
 <template>
+
   <div class="hello">
+     <div class="search-container">
+    <form >
+      <input  id='call' v-model="search" type="text" placeholder="Search by name"  >
+    </form>
+  </div>
     <div class="row">
       <div class="column">
         <div
-          v-for="image in images[0]" v-bind:key="image"
+          v-for="image in filteredImages" v-bind:key="image"
           class="imgs">
-          <img  v-bind:src='image'  />
+       
+          <img  v-bind:src='image.url'/>
           <div class="overlay">
-            <button @click="deletes(item)">Delete</button>
-            <label class='label'>label</label>
+             <v-dialog
+              v-model="dialog"
+              persistent
+              max-width="600px">
+      <template v-slot:activator="{ on, attrs }">
+               <button class="dbutton"  v-bind="attrs"
+          v-on="on"  >Delete</button>
+          </template>
+      <v-card>
+        <v-card-title>
+          <span class="headline">photo delete verification</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <form @submit.prevent="savePhoto" >
+                <v-text-field
+                  label="Label"
+                  required
+                  v-model="label"
+                >
+                
+                </v-text-field>
+                </form>
+              </v-col>
+            </v-row>
+          </v-container>
+          <small>Please enter the images label .</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            text
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+          type="submit"
+            text
+          
+          >
+            Submit
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+            <label class='label'>{{image.label}}</label>
+            </div>
+        </div>
+      </div>
+     <div class="column">
+        <div
+          v-for="image in list2" v-bind:key="image"
+          class="imgs">
+       
+          <img  v-bind:src='image.url'  />
+          <div class="overlay">
+             <v-dialog
+            v-model="dialog"
+            persistent
+            max-width="600px"
+    >
+      <template v-slot:activator="{ on, attrs }">
+               <button class='dbutton' v-bind="attrs"
+          v-on="on"  >Delete</button>
+          </template>
+      <v-card>
+        <v-card-title>
+          <span class="headline">photo delete verification</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <form @submit.prevent="savePhoto" >
+                <v-text-field
+                  label="Label"
+                  required
+                  v-model="label"
+                >
+                
+                </v-text-field>
+                </form>
+              </v-col>
+            </v-row>
+          </v-container>
+          <small>Please enter the images label .</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            text
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+          type="submit"
+            text
+          >
+            Submit
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+            <label class='label'>{{image.label}}</label>
             </div>
         </div>
       </div>
       <div class="column">
         <div
-          v-for="image in t" v-bind:key="image"
-          class="imgs"
-        >
-          <img  v-bind:src='image'  />
-         <div class="overlay">
-            <button @click="deletes(item)">Delete</button>
-            <label class='label'>label</label>
-            </div>
-        </div>
-      </div>
-      <div class="column">
-        <div
-          v-for="image in g" v-bind:key="image"
-          class="imgs"
-        >
-          <img  v-bind:src='image'  />
-         <div class="overlay">
-            <button @click="deletes(item)">Delete</button>
-            <label class='label'>label</label>
+          v-for="image in list1" v-bind:key="image"
+          class="imgs">
+       
+          <img  v-bind:src='image.url'  />
+          <div class="overlay">
+             <v-dialog
+            v-model="dialog"
+            persistent
+            max-width="600px"
+    >
+      <template v-slot:activator="{ on, attrs }">
+               <button  v-bind="attrs"
+          v-on="on" class='dbutton' >Delete</button>
+          </template>
+      <v-card>
+        <v-card-title>
+          <span class="headline">photo delete verification</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <form @submit.prevent="savePhoto" >
+                <v-text-field
+                  label="Label"
+                  required
+                  v-model="label"
+                >
+                
+                </v-text-field>
+                </form>
+              </v-col>
+            </v-row>
+          </v-container>
+          <small>Please enter the images label .</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            text
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+          type="submit"
+            text
+          
+          >
+            Submit
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+            <label class='label'>{{image.label}}</label>
             </div>
         </div>
       </div>
@@ -41,28 +187,92 @@
 </template>
 
 <script>
+import db from '../firebaseInit';
+import search from './nav'
+
 export default {
   name: "Photos",
-  methods: {
-    deletes(item) {
-      console.log(item);
-      this.$emit('delete:item', item)
-    },
-  },
+
   data() {
-    return { images :[[ 'https://media.senscritique.com/media/000017453094/150_200/Sarra_Hannachi.jpg',
-        'https://i.pinimg.com/474x/8d/35/07/8d35077e43cff3cafe7843926c9567d8.jpg'],            
-        ],
-        t:['https://www.jeuneafrique.com/medias/2012/03/13/012032012175333000000P.jpg',
-              'https://www.baya.tn/wp-content/uploads/2014/02/mis1.png'],
-             g: ['https://i.pinimg.com/originals/c5/1d/6b/c51d6b511edd41a278667b951baedcad.jpg',
-                  'https://i0.wp.com/arjazia.com/wp-content/uploads/2020/12/t-shirt-tunisie-femme-made-in-tunisia.jpg?fit=800%2C800&ssl=1&resize=400%2C400',
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8TPOLm2ayfQIuXBM9g51x72SCO0ul5NbDcA&usqp=CAU']
-                     }}
-};
+    return {
+           label: null,
+          url: null,
+           dialog: false, 
+        imagees: [],
+        list1: [],
+        list2: [],
+        search: ''
+        
+
+    }
+    
+    },
+    created () {
+        db.collection("list1").get()
+        .then(querySnapshot => {
+     querySnapshot.forEach(doc => {
+                console.log( doc.data())
+                const data ={
+                    'id': doc.id,
+                    'label': doc.data().label,
+                    'url': doc.data().url
+                }
+                this.list1.push(data)
+            })
+        }),
+        db.collection("imagees").get()
+        .then(querySnapshot => {
+     querySnapshot.forEach(doc => {
+                console.log( doc.data())
+                const data ={
+                    'id': doc.id,
+                    'label': doc.data().label,
+                    'url': doc.data().url
+                }
+                this.imagees.push(data)
+            })
+        }),
+         db.collection("list2").get()
+        .then(querySnapshot => {
+     querySnapshot.forEach(doc => {
+                console.log( doc.data())
+                const data ={
+                    'id': doc.id,
+                    'label': doc.data().label,
+                    'url': doc.data().url
+                }
+                this.list2.push(data)
+            })
+        })
+        
+    },
+    
+    computed: {
+                filteredImages: function () {
+                  return this.imagees.filter((image) => {
+                    return image.label.match(search)
+                  })
+                }
+              },
+    methods: {
+                deletephoto (){
+                if(confirm('Are you sure')){
+                    db.collection('imagees').get()
+                    .then(querySnapshot => {
+                        querySnapshot.forEach(doc => {
+                            doc.ref.delete();
+                        })
+                    })
+                }
+                }
+            }
+
+    
+    }
 </script>
 
-<style scoped>
+<style lang='css'>
+
 .imgs:hover .overlay {
   bottom: 0;
   height: 100%;
@@ -81,10 +291,15 @@ export default {
    margin-top: 8px;
 
 }
+form{
+display:flex;
+justify-content:center;
+}
 .row {
   display: flex;
   flex-wrap: wrap;
   padding: 0 4px;
+  margin:14px;
   justify-content: center;
 }
 .label {
@@ -92,7 +307,7 @@ export default {
    position: absolute;
   -webkit-transform: translate(50%, 50%);
   -ms-transform: translate(50%, 50%);
-  transform: translate(50%, 2500%);
+  transform: translate(50%, 50%);
   
 }
 .column {
@@ -112,29 +327,25 @@ space-between;
   position: relative;
 }
 
-button {
-  border: 1px solid #eb5757;
+.dbutton {
+  border: 1px solid #d43b3b;
   border-radius: 12px;
-  background: none;
   font-style: normal;
   font-weight: 400;
-  font-size: 10px;
+  font-size: 20px;
   line-height: 15px;
+  color:  #d43b3b;
   text-transform: lowercase;
-  color: #eb5757;
+  background-color: #f5f5f500;
   position: absolute;
   cursor: pointer;
   top: 20px;
   right: 16px;
   font-size: 18px;
-  opacity: 0;
   padding: 7px;
-   position: absolute;
-  -webkit-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
+  position: absolute;
+  z-index: 2;
+   }
 p {
   font-style: normal;
   font-weight: 500;
@@ -147,5 +358,42 @@ p {
   z-index: 3;
   opacity: 0;
 }
+.topnav .search-container {
+  float: left;
+}
+
+.topnav input[type=text] {
+  padding: 6px;
+  margin-top: 8px;
+  font-size: 17px;
+
+}
+
+
+
+
+
+@media screen and (max-width: 600px) {
+  .topnav .search-container {
+    float: right;
+  }
+  .topnav .search-container {
+    float: right ;
+  }
+
+   .topnav input[type=text], .topnav .search-container button {
+    float: right ;
+    text-align: left;
+    width: 100%;
+    margin: 0;
+    padding: 14px;
+
+  }
+  
+}
+#call{
+    border: 1px solid rgb(10, 10, 10);  
+    border-radius: 24px;
+  }
 
 </style>
